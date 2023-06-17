@@ -1,12 +1,35 @@
-<ejs-chart #chart [primaryXAxis]="primaryXAxis"  [primaryYAxis]="primaryYAxis" [title]='title'>
-  <e-series-collection>
-    <e-series [dataSource]='chartData' type='Spline' xName='x' yName='y' name='Photon' width=2 [marker]='marker'></e-series>
-  </e-series-collection>
-</ejs-chart>
-<ejs-slider #tempSlider
-            width="50%"
-            [min]= '3000'
-            [max]= '25000'
-            [value]= 'defaultTemp'
-            (changed)="tempChangeHandler($event)">
-</ejs-slider>
+<ejs-dashboardlayout id="dashboard"
+                     [columns]="5"
+                     [cellAspectRatio]="100/70"
+                     [cellSpacing]="[15, 15]"
+                     [allowFloating]="false"
+                     [allowDragging]="false">
+    <div class="e-panel" data-row="0" data-col="0" data-sizeX="1" data-sizeY="2">
+      <div class="e-panel-container" *ngIf="dashLoaded">
+        <div class="e-panel-header centerAlign">Options</div>
+        <div class="e-panel-content">
+          <ejs-slider #tempSlider
+                      width="80%"
+                      [min]= '3000'
+                      [max]= '25000'
+                      [value]= 'defaultTemp'
+                      (changed)="tempChangeHandler($event)">
+          </ejs-slider>
+        </div>
+      </div>
+    </div>
+    <div class="e-panel" data-row="0" data-col="1" data-sizeX="4" data-sizeY="2">
+      <div class="e-panel-container" *ngIf="dashLoaded">
+        <div class="e-panel-header centerAlign">Blackbody Radiation</div>
+        <div class="e-panel-content">
+          <ejs-chart id="chart" #chart [primaryXAxis]="primaryXAxis" [primaryYAxis]="primaryYAxis">
+            <e-series-collection>
+              <e-series [dataSource]='chartData' type='Spline' xName='x' yName='y' name='Photon' fill="black" width=2 [marker]='marker'></e-series>
+            </e-series-collection>
+          </ejs-chart>
+        </div>
+      </div>
+    </div>
+</ejs-dashboardlayout>
+
+

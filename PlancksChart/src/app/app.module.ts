@@ -7,6 +7,7 @@ import { SliderModule } from '@syncfusion/ej2-angular-inputs';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PlancksChartComponent } from './plancks-chart/plancks-chart.component';
+import { DashboardLayoutModule } from "@syncfusion/ej2-angular-layouts";
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { PlancksChartComponent } from './plancks-chart/plancks-chart.component';
     BrowserModule,
     AppRoutingModule,
     ChartModule,
-    SliderModule
+    SliderModule,
+    DashboardLayoutModule
   ],
   providers: [StripLineService, SplineSeriesService],
   bootstrap: [AppComponent]

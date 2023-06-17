@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ChartComponent, StripLineSettingsModel} from "@syncfusion/ej2-angular-charts";
 import {SliderComponent} from "@syncfusion/ej2-angular-inputs";
 
@@ -7,15 +7,17 @@ import {SliderComponent} from "@syncfusion/ej2-angular-inputs";
   templateUrl: './plancks-chart.component.html',
   styleUrls: ['./plancks-chart.component.less']
 })
-export class PlancksChartComponent implements OnInit, AfterViewInit {
-  @ViewChild("chart") private chart!: ChartComponent;
+export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewChecked {
+  @ViewChild("chart") private chart?: ChartComponent;
   @ViewChild("tempSlider") private tempSlider!: SliderComponent;
+
+  dashLoaded = false;
 
   defaultTemp = 5000;
 
   title = 'Blackbody Radiation';
 
-  chartData = [];
+  chartData: {x: number, y: number}[] = [];
 
   primaryXAxis = {
     title: 'Wavelength',
@@ -34,46 +36,18 @@ export class PlancksChartComponent implements OnInit, AfterViewInit {
 
   marker = { visible: false, width: 10, height: 10 };
 
-
   constructor() { }
 
   ngOnInit(): void {
+    this.generateData(this.defaultTemp);
   }
-
 
   ngAfterViewInit(): void {
-    this.chart.dataSource = this.generateData(this.defaultTemp);
-    this.chart.refresh();
+
   }
 
-  private plancksLawFormula(t: number, wavelength: number): number {
-    const w = wavelength * Math.pow(10, -9);
-
-    const kb = 1.3806488 * Math.pow(10, -23);
-    const h = 6.62606957 * Math.pow(10, -34);
-    const c = 299792458;
-    const e = 2.71828182845904523536;
-
-    return ((2 * h * Math.pow(c, 2)) / Math.pow(w, 5)) * (1 / (Math.pow(e, ((h*c)/(w*kb*t))) -1));
-  }
-
-  private generateData(temp: number): {x: number, y: number}[] {
-    const chartData = [];
-    for (let w = 0; w <= 1000; w+=50) {
-      chartData.push({
-        x: w,
-        y: this.plancksLawFormula(temp, w)
-      });
-    }
-
-
-    return chartData;
-    // const stefanBoltzmann = 5.670374419 * Math.pow(10, -8);
-    // const wiensDisplacement = 2.8977719;
-    // const x = (wiensDisplacement / temp) * Math.pow(10, 6);
-    // const y = (stefanBoltzmann * Math.pow(temp, 4));
-    //
-    // console.log(JSON.stringify({x: x, y: y}));
+  ngAfterViewChecked(): void {
+    this.dashLoaded = true;
   }
 
   getStripLines(): StripLineSettingsModel[] {
@@ -88,10 +62,40 @@ export class PlancksChartComponent implements OnInit, AfterViewInit {
   }
 
   tempChangeHandler(event: any) {
-    if (event?.value) {
-      this.chart.dataSource = this.generateData(event.value);
-      this.chart.refresh();
+    if (event?.value && this.chart) {
+      this.generateData(event.value);
     }
+  }
+
+  private plancksLawFormula(t: number, wavelength: number): number {
+    const w = wavelength * Math.pow(10, -9);
+
+    const kb = 1.3806488 * Math.pow(10, -23);
+    const h = 6.62606957 * Math.pow(10, -34);
+    const c = 299792458;
+    const e = 2.71828182845904523536;
+
+    return ((2 * h * Math.pow(c, 2)) / Math.pow(w, 5)) * (1 / (Math.pow(e, ((h*c)/(w*kb*t))) -1));
+  }
+
+  private generateData(temp: number) {
+    const chartData = [];
+    for (let w = 0; w <= 1000; w+=50) {
+      chartData.push({
+        x: w,
+        y: this.plancksLawFormula(temp, w)
+      });
+    }
+
+    this.chartData = chartData;
+    this.chart?.refresh();
+
+    // const stefanBoltzmann = 5.670374419 * Math.pow(10, -8);
+    // const wiensDisplacement = 2.8977719;
+    // const x = (wiensDisplacement / temp) * Math.pow(10, 6);
+    // const y = (stefanBoltzmann * Math.pow(temp, 4));
+    //
+    // console.log(JSON.stringify({x: x, y: y}));
   }
 }
 
