@@ -9,11 +9,9 @@ import {SliderComponent} from "@syncfusion/ej2-angular-inputs";
 })
 export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild("chart") private chart?: ChartComponent;
-  @ViewChild("tempSlider") private tempSlider!: SliderComponent;
+  // @ViewChild("tempSlider") private tempSlider!: SliderComponent;
 
   dashLoaded = false;
-
-  defaultTemp = 5000;
 
   title = 'Blackbody Radiation';
 
@@ -23,7 +21,7 @@ export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewCh
     title: 'Wavelength',
     valueType: 'Double',
     minimum: 0,
-    maximum: 1000,
+    maximum: 1010,
     interval: 100,
     stripLines: this.getStripLines()
   };
@@ -34,12 +32,14 @@ export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewCh
     minimum: 0
   };
 
-  marker = { visible: false, width: 10, height: 10 };
+  minTemp = 200;
+  maxTemp = 40200;
+  temp = 5000;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.generateData(this.defaultTemp);
+    this.generateData(this.temp);
   }
 
   ngAfterViewInit(): void {
@@ -80,7 +80,7 @@ export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewCh
 
   private generateData(temp: number) {
     const chartData = [];
-    for (let w = 0; w <= 1000; w+=50) {
+    for (let w = 1; w <= 1010; w+=10) {
       chartData.push({
         x: w,
         y: this.plancksLawFormula(temp, w)
