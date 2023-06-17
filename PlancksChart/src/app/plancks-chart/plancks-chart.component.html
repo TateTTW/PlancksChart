@@ -1,0 +1,12 @@
+<ejs-chart #chart [primaryXAxis]="primaryXAxis"  [primaryYAxis]="primaryYAxis" [title]='title'>
+  <e-series-collection>
+    <e-series [dataSource]='chartData' type='Spline' xName='x' yName='y' name='Photon' width=2 [marker]='marker'></e-series>
+  </e-series-collection>
+</ejs-chart>
+<ejs-slider #tempSlider
+            width="50%"
+            [min]= '3000'
+            [max]= '25000'
+            [value]= 'defaultTemp'
+            (changed)="tempChangeHandler($event)">
+</ejs-slider>
