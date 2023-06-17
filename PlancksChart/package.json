@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --base-href https://tatettw.github.io/BlackbodyRadiation/docs/",
+    "build": "ng build --base-href https://tatettw.github.io/BlackbodyRadiation/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
