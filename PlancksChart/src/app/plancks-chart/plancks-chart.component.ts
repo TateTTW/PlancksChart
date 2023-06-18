@@ -36,10 +36,13 @@ export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewCh
   maxTemp = 40200;
   temp = 5000;
 
+  perceivedColor = 'rgba(0, 0, 0, 0)'
+
   constructor() { }
 
   ngOnInit(): void {
     this.generateData(this.temp);
+    this.generatePerceivedColor(this.temp);
   }
 
   ngAfterViewInit(): void {
@@ -62,8 +65,9 @@ export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewCh
   }
 
   tempChangeHandler(event: any) {
-    if (event?.value && this.chart) {
+    if (event?.value) {
       this.generateData(event.value);
+      this.generatePerceivedColor(event.value);
     }
   }
 
@@ -96,6 +100,24 @@ export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewCh
     // const y = (stefanBoltzmann * Math.pow(temp, 4));
     //
     // console.log(JSON.stringify({x: x, y: y}));
+  }
+
+  private generatePerceivedColor(temp: number) {
+    temp = this.clamp(temp, this.minTemp, this.maxTemp) / 100;
+
+    const r = temp <= 66 ? 255 : this.clamp(329.698727446 * (Math.pow(temp - 60, -0.1332047592)), 0, 255);
+
+    const g = temp <= 66 ?
+      this.clamp(99.4708025861 * Math.log(temp) - 161.1195681661, 0, 255) :
+      this.clamp(288.1221695283 * (Math.pow(temp - 60, -0.0755148492)), 0, 255);
+
+    const b = temp >= 66 ? 255 : temp <= 19 ? 0 : this.clamp(138.5177312231 * Math.log(temp - 10) - 305.0447927307, 0, 255);
+
+    this.perceivedColor = `rgb(${r}, ${g}, ${b})`;
+  }
+
+  private clamp(num: number, min: number, max: number): number {
+    return num < min ? min : num > max ? max : num;
   }
 }
 
