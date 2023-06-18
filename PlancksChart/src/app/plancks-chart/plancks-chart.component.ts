@@ -83,7 +83,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
 
   private generateData(temp?: number) {
     const chartData = [];
-    for (let w = 1; w <= 1010; w+=10) {
+    for (let w = 1; w <= 1020; w+=10) {
       chartData.push({
         x: w,
         y: this.plancksLawFormula(temp ?? this.temp, w)
