@@ -1,15 +1,12 @@
-import {AfterViewChecked, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {ChartComponent, StripLineSettingsModel} from "@syncfusion/ej2-angular-charts";
-import {SliderComponent} from "@syncfusion/ej2-angular-inputs";
+import {AfterViewChecked, Component, OnInit} from '@angular/core';
+import {StripLineSettingsModel} from "@syncfusion/ej2-angular-charts";
 
 @Component({
   selector: 'plancks-chart',
   templateUrl: './plancks-chart.component.html',
   styleUrls: ['./plancks-chart.component.less']
 })
-export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  @ViewChild("chart") private chart?: ChartComponent;
-  // @ViewChild("tempSlider") private tempSlider!: SliderComponent;
+export class PlancksChartComponent implements OnInit, AfterViewChecked {
 
   dashLoaded = false;
 
@@ -36,17 +33,13 @@ export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewCh
   maxTemp = 40200;
   temp = 5000;
 
+  plancksLawBy: string = "wavelength";
   perceivedColor = 'rgba(0, 0, 0, 0)'
 
   constructor() { }
 
   ngOnInit(): void {
-    this.generateData(this.temp);
-    this.generatePerceivedColor(this.temp);
-  }
-
-  ngAfterViewInit(): void {
-
+    this.generateData();
   }
 
   ngAfterViewChecked(): void {
@@ -64,10 +57,16 @@ export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewCh
     return [red, orange, yellow, green, blue, violet];
   }
 
-  tempChangeHandler(event: any) {
+  changePlancksLawBy(event: any) {
+    if (event?.value) {
+      this.plancksLawBy = event.value;
+      this.generateData();
+    }
+  }
+
+  changeTemp(event: any) {
     if (event?.value) {
       this.generateData(event.value);
-      this.generatePerceivedColor(event.value);
     }
   }
 
@@ -82,18 +81,18 @@ export class PlancksChartComponent implements OnInit, AfterViewInit, AfterViewCh
     return ((2 * h * Math.pow(c, 2)) / Math.pow(w, 5)) * (1 / (Math.pow(e, ((h*c)/(w*kb*t))) -1));
   }
 
-  private generateData(temp: number) {
+  private generateData(temp?: number) {
     const chartData = [];
     for (let w = 1; w <= 1010; w+=10) {
       chartData.push({
         x: w,
-        y: this.plancksLawFormula(temp, w)
+        y: this.plancksLawFormula(temp ?? this.temp, w)
       });
     }
 
     this.chartData = chartData;
-    this.chart?.refresh();
 
+    this.generatePerceivedColor(temp ?? this.temp);
     // const stefanBoltzmann = 5.670374419 * Math.pow(10, -8);
     // const wiensDisplacement = 2.8977719;
     // const x = (wiensDisplacement / temp) * Math.pow(10, 6);

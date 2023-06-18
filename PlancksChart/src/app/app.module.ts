@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { ChartModule, SplineSeriesService, StripLineService } from "@syncfusion/ej2-angular-charts";
 import { SliderModule, NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
+import { RadioButtonModule } from '@syncfusion/ej2-angular-buttons';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +20,7 @@ import { DashboardLayoutModule } from "@syncfusion/ej2-angular-layouts";
     AppRoutingModule,
     ChartModule,
     SliderModule,
+    RadioButtonModule,
     NumericTextBoxModule,
     DashboardLayoutModule
   ],

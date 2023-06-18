@@ -1,11 +1,24 @@
-.e-panel {
-  text-align: center;
-  padding: 15px;
-}
-
 #chart {
   height: calc(100% - 10px);
   margin: 5px;
+}
+
+#tempDiv {
+  height: 40%;
+  border: 2px solid darkgrey;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+#xAxisDiv {
+  height: 25%;
+  border: 2px solid darkgrey;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: space-evenly;
 }
 
 #perceivedColor {
@@ -14,7 +27,25 @@
   border-radius: 10%;
 }
 
+.e-panel {
+  text-align: center;
+  padding: 15px;
+}
+
 .e-panel-content {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: space-evenly;
   width: auto;
   height: calc(100% - 28px) !important;
+}
+
+.inputHeader {
+  display: block;
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 13px;
+  font-weight: 400;
+  margin: 0px 0px 10px;
+  font-family: inherit;
 }
