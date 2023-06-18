@@ -15,7 +15,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
   chartData: {x: number, y: number}[] = [];
 
   primaryXAxis = {
-    title: 'Wavelength',
+    title: 'Wavelength (nm)',
     valueType: 'Double',
     minimum: 0,
     maximum: 1010,
