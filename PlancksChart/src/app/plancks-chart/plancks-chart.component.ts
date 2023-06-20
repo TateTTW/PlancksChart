@@ -1,5 +1,6 @@
-import {AfterViewChecked, Component, OnInit} from '@angular/core';
-import {StripLineSettingsModel} from "@syncfusion/ej2-angular-charts";
+import {AfterViewChecked, Component, OnInit, ViewChild} from '@angular/core';
+import {ChartComponent, StripLineSettingsModel} from "@syncfusion/ej2-angular-charts";
+import {coerceBooleanProperty} from '@angular/cdk/coercion';
 
 @Component({
   selector: 'plancks-chart',
@@ -7,10 +8,9 @@ import {StripLineSettingsModel} from "@syncfusion/ej2-angular-charts";
   styleUrls: ['./plancks-chart.component.less']
 })
 export class PlancksChartComponent implements OnInit, AfterViewChecked {
+  @ViewChild("chart") chart?: ChartComponent;
 
   dashLoaded = false;
-
-  title = 'Blackbody Radiation';
 
   chartData: {x: number, y: number}[] = [];
 
@@ -20,11 +20,11 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
     minimum: 0,
     maximum: 1010,
     interval: 100,
-    stripLines: this.getStripLines()
+    stripLines: this.getWavelengthStripLines()
   };
 
   primaryYAxis = {
-    title: 'Spectral Radiance (W*sr-1*m-3)',
+    title: 'Spectral Radiance (W*sr^-1*m^-3)',
     valueType: 'Double',
     minimum: 0
   };
@@ -33,8 +33,8 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
   maxTemp = 40200;
   temp = 5000;
 
-  plancksLawBy: string = "wavelength";
-  perceivedColor = 'rgba(0, 0, 0, 0)'
+  calcByWavelength = true;
+  perceivedColor = 'rgba(0, 0, 0, 0)';
 
   constructor() { }
 
@@ -46,22 +46,46 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
     this.dashLoaded = true;
   }
 
-  getStripLines(): StripLineSettingsModel[] {
+  getWavelengthStripLines(): StripLineSettingsModel[] {
     const red: StripLineSettingsModel = { start: 625, end: 740, color: 'red', visible: true, zIndex: 'Behind' };
     const orange: StripLineSettingsModel = { start: 590, end: 625, color: 'orange', visible: true, zIndex: 'Behind' };
-    const yellow: StripLineSettingsModel = { start: 570, end: 590, color: 'yellow', visible: true, zIndex: 'Behind' };
-    const green: StripLineSettingsModel = { start: 495, end: 570, color: 'green', visible: true, zIndex: 'Behind' };
-    const blue: StripLineSettingsModel = { start: 450, end: 495, color: 'blue', visible: true, zIndex: 'Behind' };
-    const violet: StripLineSettingsModel = { start: 380, end: 450, color: 'violet', visible: true, zIndex: 'Behind' };
+    const yellow: StripLineSettingsModel = { start: 565, end: 590, color: 'yellow', visible: true, zIndex: 'Behind' };
+    const green: StripLineSettingsModel = { start: 520, end: 565, color: 'green', visible: true, zIndex: 'Behind' };
+    const cyan: StripLineSettingsModel = { start: 500, end: 520, color: 'cyan', visible: true, zIndex: 'Behind' };
+    const blue: StripLineSettingsModel = { start: 435, end: 500, color: 'blue', visible: true, zIndex: 'Behind' };
+    const violet: StripLineSettingsModel = { start: 380, end: 435, color: 'purple', visible: true, zIndex: 'Behind' };
 
-    return [red, orange, yellow, green, blue, violet];
+    return [red, orange, yellow, green, cyan, blue, violet];
+  }
+
+  getFrequencyStripLines(): StripLineSettingsModel[] {
+    const red: StripLineSettingsModel = { end: 480, start: 405, color: 'red', visible: true, zIndex: 'Behind' };
+    const orange: StripLineSettingsModel = { end: 508, start: 480, color: 'orange', visible: true, zIndex: 'Behind' };
+    const yellow: StripLineSettingsModel = { end: 531, start: 508, color: 'yellow', visible: true, zIndex: 'Behind' };
+    const green: StripLineSettingsModel = { end: 577, start: 531, color: 'green', visible: true, zIndex: 'Behind' };
+    const cyan: StripLineSettingsModel = { end: 600, start: 577, color: 'cyan', visible: true, zIndex: 'Behind' };
+    const blue: StripLineSettingsModel = { end: 689, start: 600, color: 'blue', visible: true, zIndex: 'Behind' };
+    const violet: StripLineSettingsModel = { end: 789, start: 689, color: 'purple', visible: true, zIndex: 'Behind' };
+
+    return [red, orange, yellow, green, cyan, blue, violet];
   }
 
   changePlancksLawBy(event: any) {
-    if (event?.value) {
-      this.plancksLawBy = event.value;
-      this.generateData();
+    this.calcByWavelength = coerceBooleanProperty(event?.value);
+
+    if (this.chart) {
+      if (this.calcByWavelength) {
+        this.chart.primaryYAxis.title = "Spectral Radiance (W*sr^-1*m^-3)";
+        this.chart.primaryXAxis.title = "Wavelength (nm)";
+        this.chart.primaryXAxis.stripLines = this.getWavelengthStripLines();
+      } else {
+        this.chart.primaryYAxis.title = "Spectral Radiance (J*s^-1*m^-2*sr^-1*Hz^-1)";
+        this.chart.primaryXAxis.title = "Frequency (10^12 Hz)";
+        this.chart.primaryXAxis.stripLines = this.getFrequencyStripLines();
+      }
     }
+
+    this.generateData();
   }
 
   changeTemp(event: any) {
@@ -70,35 +94,39 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  private plancksLawFormula(t: number, wavelength: number): number {
-    const w = wavelength * Math.pow(10, -9);
-
-    const kb = 1.3806488 * Math.pow(10, -23);
-    const h = 6.62606957 * Math.pow(10, -34);
-    const c = 299792458;
-    const e = 2.71828182845904523536;
-
-    return ((2 * h * Math.pow(c, 2)) / Math.pow(w, 5)) * (1 / (Math.pow(e, ((h*c)/(w*kb*t))) -1));
+  private generateData(temp?: number) {
+    if (this.calcByWavelength) {
+      this.generateWavelengthData(temp ?? this.temp);
+    } else {
+      this.generateFrequencyData(temp ?? this.temp);
+    }
+    this.generatePerceivedColor(temp ?? this.temp);
   }
 
-  private generateData(temp?: number) {
+  generateWavelengthData(temp: number) {
     const chartData = [];
-    for (let w = 1; w <= 1020; w+=10) {
-      chartData.push({
-        x: w,
-        y: this.plancksLawFormula(temp ?? this.temp, w)
-      });
+    for (let i = 1; i <= 1020; i += 10) {
+      const w = i * Math.pow(10, -9);
+      chartData.push({x: i, y: this.wavelengthFormula(temp, w)});
     }
-
     this.chartData = chartData;
+  }
 
-    this.generatePerceivedColor(temp ?? this.temp);
-    // const stefanBoltzmann = 5.670374419 * Math.pow(10, -8);
-    // const wiensDisplacement = 2.8977719;
-    // const x = (wiensDisplacement / temp) * Math.pow(10, 6);
-    // const y = (stefanBoltzmann * Math.pow(temp, 4));
-    //
-    // console.log(JSON.stringify({x: x, y: y}));
+  generateFrequencyData(temp: number) {
+    const chartData = [];
+    for (let i = 1; i <= 1020; i += 10) {
+      const f = i * Math.pow(10, 12);
+      chartData.push({x: i, y: this.frequencyFormula(temp, f)});
+    }
+    this.chartData = chartData;
+  }
+
+  private wavelengthFormula(t: number, w: number): number {
+    return ((2 * Const.h * Math.pow(Const.c, 2)) / Math.pow(w, 5)) * (1 / (Math.pow(Const.e, ((Const.h*Const.c)/(w*Const.kb*t))) -1));
+  }
+
+  private frequencyFormula(t: number, f: number): number {
+    return ((2 * Const.h * Math.pow(f, 3)) / Math.pow(Const.c, 2)) * (1 / (Math.pow(Const.e, ((Const.h*f)/(Const.kb*t))) -1));
   }
 
   private generatePerceivedColor(temp: number) {
@@ -120,3 +148,9 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
   }
 }
 
+enum Const {
+   kb = 1.3806488 * Math.pow(10, -23),
+   h = 6.62606957 * Math.pow(10, -34),
+   c = 299792458,
+   e = 2.71828182845904523536
+}
