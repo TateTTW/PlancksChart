@@ -31,7 +31,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
 
   minTemp = 200;
   maxTemp = 40200;
-  temp = 5000;
+  temp = 20200;
 
   calcByWavelength = true;
   perceivedColor = 'rgba(0, 0, 0, 0)';

@@ -3,31 +3,40 @@
                      [cellAspectRatio]="100/35"
                      [cellSpacing]="[15, 15]"
                      [allowFloating]="false"
-                     [allowDragging]="false">
+                     [allowDragging]="false"
+                     [mediaQuery]="'max-width: 1330px'">
     <div class="e-panel" data-row="0" data-col="0" data-sizeX="1" data-sizeY="3">
       <div class="e-panel-container">
         <div class="e-panel-header">Options</div>
         <div class="e-panel-content">
-          <div id="tempDiv">
+          <div id="tempDiv" class="inputGroup">
             <label class="inputHeader">Temperature (Kelvin)</label>
-            <ejs-numerictextbox width="50%" step='500' [(value)]="temp" [min]="minTemp" [max]="maxTemp"></ejs-numerictextbox>
-            <ejs-slider *ngIf="dashLoaded"
-                        #tempSlider
-                        width="80%"
-                        [min]="minTemp"
-                        [max]="maxTemp"
-                        [(value)]="temp"
-                        [ticks]="{ placement: 'After', largeStep: 10000 }"
-                        (change)="changeTemp($event)">
-            </ejs-slider>
-          </div>
-          <div id="xAxisDiv">
-            <label class="inputHeader">Planck's Law by:</label>
-            <div>
-              <ejs-radiobutton label="Wavelength" checked="true" [value]="true" name="xAxis" (change)="changePlancksLawBy($event)"></ejs-radiobutton>
+            <div class="inputGroupContent">
+              <div>
+                <ejs-numerictextbox width="100px" step='500' [(value)]="temp" [min]="minTemp" [max]="maxTemp"></ejs-numerictextbox>
+                <ejs-slider *ngIf="dashLoaded"
+                            #tempSlider
+                            width="80%"
+                            [min]="minTemp"
+                            [max]="maxTemp"
+                            [(value)]="temp"
+                            [ticks]="{ placement: 'After', largeStep: 10000 }"
+                            (change)="changeTemp($event)">
+                </ejs-slider>
+              </div>
             </div>
-            <div>
-              <ejs-radiobutton label="Frequency" [value]="false" name="xAxis" (change)="changePlancksLawBy($event)"></ejs-radiobutton>
+          </div>
+          <div id="xAxisDiv" class="inputGroup">
+            <label class="inputHeader">Planck's Law by:</label>
+            <div class="inputGroupContent">
+              <div>
+                <div>
+                  <ejs-radiobutton label="Wavelength" checked="true" [value]="true" name="xAxis" (change)="changePlancksLawBy($event)"></ejs-radiobutton>
+                </div>
+                <div>
+                  <ejs-radiobutton label="Frequency" [value]="false" name="xAxis" (change)="changePlancksLawBy($event)"></ejs-radiobutton>
+                </div>
+              </div>
             </div>
           </div>
         </div>
