@@ -80,7 +80,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
         this.chart.primaryXAxis.stripLines = this.getWavelengthStripLines();
       } else {
         this.chart.primaryYAxis.title = "Spectral Radiance (J*s^-1*m^-2*sr^-1*Hz^-1)";
-        this.chart.primaryXAxis.title = "Frequency (10^12 Hz)";
+        this.chart.primaryXAxis.title = "Frequency (THz)";
         this.chart.primaryXAxis.stripLines = this.getFrequencyStripLines();
       }
     }
