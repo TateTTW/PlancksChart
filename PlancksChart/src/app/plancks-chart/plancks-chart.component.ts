@@ -46,28 +46,10 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
     this.dashLoaded = true;
   }
 
-  getWavelengthStripLines(): StripLineSettingsModel[] {
-    const red: StripLineSettingsModel = { start: 625, end: 740, color: 'red', visible: true, zIndex: 'Behind' };
-    const orange: StripLineSettingsModel = { start: 590, end: 625, color: 'orange', visible: true, zIndex: 'Behind' };
-    const yellow: StripLineSettingsModel = { start: 565, end: 590, color: 'yellow', visible: true, zIndex: 'Behind' };
-    const green: StripLineSettingsModel = { start: 520, end: 565, color: 'green', visible: true, zIndex: 'Behind' };
-    const cyan: StripLineSettingsModel = { start: 500, end: 520, color: 'cyan', visible: true, zIndex: 'Behind' };
-    const blue: StripLineSettingsModel = { start: 435, end: 500, color: 'blue', visible: true, zIndex: 'Behind' };
-    const violet: StripLineSettingsModel = { start: 380, end: 435, color: 'purple', visible: true, zIndex: 'Behind' };
-
-    return [red, orange, yellow, green, cyan, blue, violet];
-  }
-
-  getFrequencyStripLines(): StripLineSettingsModel[] {
-    const red: StripLineSettingsModel = { end: 480, start: 405, color: 'red', visible: true, zIndex: 'Behind' };
-    const orange: StripLineSettingsModel = { end: 508, start: 480, color: 'orange', visible: true, zIndex: 'Behind' };
-    const yellow: StripLineSettingsModel = { end: 531, start: 508, color: 'yellow', visible: true, zIndex: 'Behind' };
-    const green: StripLineSettingsModel = { end: 577, start: 531, color: 'green', visible: true, zIndex: 'Behind' };
-    const cyan: StripLineSettingsModel = { end: 600, start: 577, color: 'cyan', visible: true, zIndex: 'Behind' };
-    const blue: StripLineSettingsModel = { end: 689, start: 600, color: 'blue', visible: true, zIndex: 'Behind' };
-    const violet: StripLineSettingsModel = { end: 789, start: 689, color: 'purple', visible: true, zIndex: 'Behind' };
-
-    return [red, orange, yellow, green, cyan, blue, violet];
+  axisLabelRender(args: any) {
+    if (args?.axis?.propName == "primaryYAxis") {
+      args.text = args.value.toExponential(2);
+    }
   }
 
   changePlancksLawBy(event: any) {
@@ -103,7 +85,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
     this.generatePerceivedColor(temp ?? this.temp);
   }
 
-  generateWavelengthData(temp: number) {
+  private generateWavelengthData(temp: number) {
     const chartData = [];
     for (let i = 1; i <= 1020; i += 10) {
       const w = i * Math.pow(10, -9);
@@ -112,7 +94,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
     this.chartData = chartData;
   }
 
-  generateFrequencyData(temp: number) {
+  private generateFrequencyData(temp: number) {
     const chartData = [];
     for (let i = 1; i <= 1020; i += 10) {
       const f = i * Math.pow(10, 12);
@@ -145,6 +127,30 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
 
   private clamp(num: number, min: number, max: number): number {
     return num < min ? min : num > max ? max : num;
+  }
+
+  private getWavelengthStripLines(): StripLineSettingsModel[] {
+    const red: StripLineSettingsModel = { start: 625, end: 740, color: 'red', visible: true, zIndex: 'Behind' };
+    const orange: StripLineSettingsModel = { start: 590, end: 625, color: 'orange', visible: true, zIndex: 'Behind' };
+    const yellow: StripLineSettingsModel = { start: 565, end: 590, color: 'yellow', visible: true, zIndex: 'Behind' };
+    const green: StripLineSettingsModel = { start: 520, end: 565, color: 'green', visible: true, zIndex: 'Behind' };
+    const cyan: StripLineSettingsModel = { start: 500, end: 520, color: 'cyan', visible: true, zIndex: 'Behind' };
+    const blue: StripLineSettingsModel = { start: 435, end: 500, color: 'blue', visible: true, zIndex: 'Behind' };
+    const violet: StripLineSettingsModel = { start: 380, end: 435, color: 'purple', visible: true, zIndex: 'Behind' };
+
+    return [red, orange, yellow, green, cyan, blue, violet];
+  }
+
+  private getFrequencyStripLines(): StripLineSettingsModel[] {
+    const red: StripLineSettingsModel = { end: 480, start: 405, color: 'red', visible: true, zIndex: 'Behind' };
+    const orange: StripLineSettingsModel = { end: 508, start: 480, color: 'orange', visible: true, zIndex: 'Behind' };
+    const yellow: StripLineSettingsModel = { end: 531, start: 508, color: 'yellow', visible: true, zIndex: 'Behind' };
+    const green: StripLineSettingsModel = { end: 577, start: 531, color: 'green', visible: true, zIndex: 'Behind' };
+    const cyan: StripLineSettingsModel = { end: 600, start: 577, color: 'cyan', visible: true, zIndex: 'Behind' };
+    const blue: StripLineSettingsModel = { end: 689, start: 600, color: 'blue', visible: true, zIndex: 'Behind' };
+    const violet: StripLineSettingsModel = { end: 789, start: 689, color: 'purple', visible: true, zIndex: 'Behind' };
+
+    return [red, orange, yellow, green, cyan, blue, violet];
   }
 }
 

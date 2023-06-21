@@ -54,7 +54,7 @@
       <div class="e-panel-container">
         <div class="e-panel-header">Blackbody Radiation</div>
         <div class="e-panel-content">
-          <ejs-chart *ngIf="dashLoaded" id="chart" #chart [primaryXAxis]="primaryXAxis" [primaryYAxis]="primaryYAxis">
+          <ejs-chart *ngIf="dashLoaded" id="chart" #chart [primaryXAxis]="primaryXAxis" [primaryYAxis]="primaryYAxis" (axisLabelRender)="axisLabelRender($event)">
             <e-series-collection>
               <e-series [dataSource]='chartData'
                         type='Spline'
