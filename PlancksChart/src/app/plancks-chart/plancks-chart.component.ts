@@ -112,6 +112,11 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
   }
 
   private generatePerceivedColor(temp: number) {
+    if (temp <= 700) {
+      this.perceivedColor = "rgb(0, 0, 0)";
+      return;
+    }
+
     temp = this.clamp(temp, this.minTemp, this.maxTemp) / 100;
 
     const r = temp <= 66 ? 255 : this.clamp(329.698727446 * (Math.pow(temp - 60, -0.1332047592)), 0, 255);
