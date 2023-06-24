@@ -12,7 +12,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
 
   dashLoaded = false;
 
-  chartData: {x: number, y: number}[] = [];
+  chartData: { x: number, y: number }[] = [];
 
   primaryXAxis = {
     title: 'Wavelength (nm)',
@@ -57,10 +57,12 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
 
     if (this.chart) {
       if (this.calcByWavelength) {
+        this.chart.primaryXAxis.maximum = 1011;
         this.chart.primaryYAxis.title = "Spectral Radiance (W*sr^-1*m^-3)";
         this.chart.primaryXAxis.title = "Wavelength (nm)";
         this.chart.primaryXAxis.stripLines = this.getWavelengthStripLines();
       } else {
+        this.chart.primaryXAxis.maximum = 2021;
         this.chart.primaryYAxis.title = "Spectral Radiance (J*s^-1*m^-2*sr^-1*Hz^-1)";
         this.chart.primaryXAxis.title = "Frequency (THz)";
         this.chart.primaryXAxis.stripLines = this.getFrequencyStripLines();
@@ -87,7 +89,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
 
   private generateWavelengthData(temp: number) {
     const chartData = [];
-    for (let i = 1; i <= 1020; i += 10) {
+    for (let i = 1; i <= 1021; i += 10) {
       const w = i * Math.pow(10, -9);
       chartData.push({x: i, y: this.wavelengthFormula(temp, w)});
     }
@@ -96,7 +98,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
 
   private generateFrequencyData(temp: number) {
     const chartData = [];
-    for (let i = 1; i <= 1020; i += 10) {
+    for (let i = 1; i <= 2021; i += 5) {
       const f = i * Math.pow(10, 12);
       chartData.push({x: i, y: this.frequencyFormula(temp, f)});
     }
