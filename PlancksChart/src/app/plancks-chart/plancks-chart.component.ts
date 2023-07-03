@@ -63,8 +63,11 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
         this.chart.primaryXAxis.title = "Wavelength (nm)";
         this.chart.primaryXAxis.stripLines = this.getWavelengthStripLines();
       } else {
-        this.chart.primaryXAxis.maximum = Math.round(this.temp / 5);
-        this.chart.primaryXAxis.interval = Math.round(Math.round(this.temp / 5) / 1000) * 100;
+        const max = Math.round(this.temp / 5);
+        const divisor = max > 100 ? 100 : max > 1000 ? 1000 : 10;
+        const multiplier = max > 100 ? 10 : max > 1000 ? 100 : 1;
+        this.chart.primaryXAxis.maximum = max;
+        this.chart.primaryXAxis.interval = Math.round(max / divisor) * multiplier;
         this.chart.primaryYAxis.title = "Spectral Radiance (J*s^-1*m^-2*sr^-1*Hz^-1)";
         this.chart.primaryXAxis.title = "Frequency (THz)";
         this.chart.primaryXAxis.stripLines = this.getFrequencyStripLines();
@@ -79,9 +82,12 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
       this.generateData(event.value);
       if (!this.calcByWavelength) {
         setTimeout(() => {
-          this.chart!.primaryXAxis.maximum = Math.round(event.value / 5);
-          this.chart!.primaryXAxis.interval = Math.round(Math.round(event.value / 5) / 1000) * 100;
-        })
+          const max = Math.round(this.temp / 5);
+          const divisor = max > 100 ? 100 : max > 1000 ? 1000 : 10;
+          const multiplier = max > 100 ? 10 : max > 1000 ? 100 : 1;
+          this.chart!.primaryXAxis.maximum = max;
+          this.chart!.primaryXAxis.interval = Math.round(max / divisor) * multiplier;
+        });
       }
     }
   }
