@@ -58,6 +58,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
     if (this.chart) {
       if (this.calcByWavelength) {
         this.chart.primaryXAxis.maximum = 1011;
+        this.chart.primaryXAxis.interval = 100;
         this.chart.primaryYAxis.title = "Spectral Radiance (W*sr^-1*m^-3)";
         this.chart.primaryXAxis.title = "Wavelength (nm)";
         this.chart.primaryXAxis.stripLines = this.getWavelengthStripLines();
