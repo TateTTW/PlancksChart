@@ -62,7 +62,8 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
         this.chart.primaryXAxis.title = "Wavelength (nm)";
         this.chart.primaryXAxis.stripLines = this.getWavelengthStripLines();
       } else {
-        this.chart.primaryXAxis.maximum = 2021;
+        this.chart.primaryXAxis.maximum = Math.round(this.temp / 5);
+        this.chart.primaryXAxis.interval = Math.round(Math.round(this.temp / 5) / 1000) * 100;
         this.chart.primaryYAxis.title = "Spectral Radiance (J*s^-1*m^-2*sr^-1*Hz^-1)";
         this.chart.primaryXAxis.title = "Frequency (THz)";
         this.chart.primaryXAxis.stripLines = this.getFrequencyStripLines();
@@ -75,6 +76,12 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
   changeTemp(event: any) {
     if (event?.value) {
       this.generateData(event.value);
+      if (!this.calcByWavelength) {
+        setTimeout(() => {
+          this.chart!.primaryXAxis.maximum = Math.round(event.value / 5);
+          this.chart!.primaryXAxis.interval = Math.round(Math.round(event.value / 5) / 1000) * 100;
+        })
+      }
     }
   }
 
@@ -98,7 +105,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
 
   private generateFrequencyData(temp: number) {
     const chartData = [];
-    for (let i = 1; i <= 2021; i += 5) {
+    for (let i = 1; i <= 8021; i += 10) {
       const f = i * Math.pow(10, 12);
       chartData.push({x: i, y: this.frequencyFormula(temp, f)});
     }
