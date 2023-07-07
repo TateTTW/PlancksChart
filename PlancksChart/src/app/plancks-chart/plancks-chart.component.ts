@@ -1,6 +1,5 @@
 import {AfterViewChecked, Component, OnInit, ViewChild} from '@angular/core';
 import {ChartComponent, StripLineSettingsModel} from "@syncfusion/ej2-angular-charts";
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
 
 @Component({
   selector: 'plancks-chart',
@@ -53,7 +52,7 @@ export class PlancksChartComponent implements OnInit, AfterViewChecked {
   }
 
   changePlancksLawBy(event: any) {
-    this.calcByWavelength = coerceBooleanProperty(event?.value);
+    this.calcByWavelength = event?.value == true;
 
     if (this.chart) {
       if (this.calcByWavelength) {
